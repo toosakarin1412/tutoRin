@@ -1,7 +1,8 @@
 {
-  "index": "Introduction",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
+  "index": "Selamat Datang",
+  "docker": "Docker",
+  "linux": "Linux",
+  "nginx": "Nginx",
   "about": {
     "title": "About",
     "type": "page"

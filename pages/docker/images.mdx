@@ -1,0 +1,175 @@
+import { Callout } from 'nextra/components';
+
+# Images Docker
+
+Pada halaman ini, kita akan membahas mengenai _image_ Docker, termasuk cara melakukan _pull_ _image_ dari [Docker Hub](https://hub.docker.com) dan cara melihat daftar _image_ yang telah diunduh. Selain itu akan dibahas mengenai cara membuat _image_ Docker sendiri.
+
+## Pull Image dari Docker Hub
+
+[Docker Hub](https://hub.docker.com/) adalah _cloud-based registry_ yang menyediakan berbagai _image_ Docker yang dapat digunakan oleh pengguna. Pengguna dapat mencari _image_ Docker yang dibutuhkan di Docker Hub dan melakukan _pull_ _image_ tersebut ke _local machine_.
+
+Pull _image_ dari Docker Hub artinya mengunduh _image_ Docker dari Docker Hub ke _local machine_. 
+
+```bash
+> docker pull [OPTIONS] NAME:[TAG]
+```
+
+<Callout>
+    **NAME** adalah nama image yang berada pada Docker Hub<br/>
+    **TAG** adalah versi dari image tersebut Note: Jika tidak ada tag, maka Docker akan mengunduh versi terbaru dari image tersebut (latest).
+</Callout>
+
+Referensi: [https://docs.docker.com/engine/reference/commandline/pull/](https://docs.docker.com/engine/reference/commandline/pull/)
+
+Berikut adalah langkah-langkah untuk melakukan _pull_ _image_ dari Docker Hub:
+
+1. Jalankan perintah berikut untuk melakukan _pull_ _image_ `ubuntu` dari Docker Hub:
+```bash
+> docker pull ubuntu:latest
+```
+atau jika ingin mengunduh versi tertentu dari _image_ `ubuntu`, misalnya versi `20.10`:
+```bash
+> docker pull ubuntu:20.10
+```
+
+2. Tunggu hingga proses _pull_ _image_ selesai.
+3. Setelah proses selesai, anda akan melihat _image_ melalui perintah `docker images`.
+```bash
+> docker images
+
+REPOSITORY                       TAG       IMAGE ID       CREATED        SIZE
+fedora                           latest    eca85b75dc19   11 days ago    222MB
+alpine                           3.20.3    91ef0af61f39   2 weeks ago    7.8MB
+alpine                           latest    91ef0af61f39   2 weeks ago    7.8MB
+ubuntu                           latest    edbfe74c41f8   8 weeks ago    78.1MB
+```
+
+## Menghapus Image Docker
+
+Untuk menghapus _image_ Docker yang tidak digunakan, kita bisa menggunakan perintah `docker rmi`.
+Berikut adalah contoh perintah untuk menghapus _image_ Docker:
+
+```bash
+> docker rmi [OPTIONS] IMAGE [IMAGE...]
+```
+
+<Callout>
+    **IMAGE** adalah nama _image_ yang ingin dihapus.
+</Callout>
+
+Referensi: [https://docs.docker.com/engine/reference/commandline/rmi/](https://docs.docker.com/engine/reference/commandline/rmi/)
+
+Berikut adalah langkah-langkah untuk menghapus _image_ Docker:
+
+1. Jalankan perintah berikut untuk menghapus _image_ `ubuntu`:
+```bash
+> docker rmi ubuntu
+```
+2. Tunggu hingga proses selesai.
+3. Setelah proses selesai, _image_ `ubuntu` akan terhapus dari _local machine_.
+
+## Membuat Image Docker Sendiri Menggunakan Dockerfile
+
+Selain menggunakan _image_ Docker yang telah tersedia di Docker Hub, kita juga bisa membuat _image_ Docker sendiri.
+Untuk membuat _image_ Docker sendiri, kita bisa menggunakan _Dockerfile_.
+
+_Dockerfile_ adalah sebuah file teks yang berisi instruksi untuk membangun _image_ Docker. _Dockerfile_ berisi langkah-langkah yang diperlukan untuk membuat _image_ Docker, seperti menentukan _base image_, menyalin file, mengeksekusi perintah, dan lain sebagainya.
+
+Berikut adalah contoh _Dockerfile_ sederhana untuk membuat _image_ yang berisi _web server_ Nginx:
+
+```Dockerfile
+# Menggunakan base image nginx
+FROM ubuntu:latest
+
+# Install Nginx
+RUN apt-get update && apt-get install -y nginx
+
+# BUka port 80
+EXPOSE 80
+
+# Perintah yang akan dijalankan ketika container dijalankan
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+Perintah untuk membuat _image_ Docker dari _Dockerfile_ adalah sebagai berikut:
+
+```bash
+> docker image build [OPTIONS] PATH
+```
+
+<Callout>
+    **PATH** adalah lokasi _Dockerfile_ yang akan digunakan untuk membangun _image_.
+</Callout>
+
+Referensi: [https://docs.docker.com/engine/reference/builder/](https://docs.docker.com/engine/reference/builder/)
+
+Berikut adalah langkah-langkah untuk membuat _image_ Docker sendiri:
+
+1. Buat _Dockerfile_ dengan isi seperti contoh di atas.
+2. Simpan _Dockerfile_ tersebut di dalam sebuah direktori.
+3. Buka terminal atau _command prompt_.
+4. Pindah ke direktori tempat _Dockerfile_ disimpan.
+5. Jalankan perintah berikut untuk membangun _image_ dari _Dockerfile_:
+```bash
+> docker build -t my-nginx .
+```
+6. Tunggu hingga proses selesai.
+7. Setelah proses selesai, _image_ `my-nginx` akan tersedia di _local machine_.
+```bash
+> docker images
+
+REPOSITORY                       TAG       IMAGE ID       CREATED        SIZE
+my-nginx                         latest    7a2b3b1b0cde   2 minutes ago  78.1MB
+fedora                           latest    eca85b75dc19   11 days ago    222MB
+alpine                           3.20.3    91ef0af61f39   2 weeks ago    7.8MB
+alpine                           latest    91ef0af61f39   2 weeks ago    7.8MB
+ubuntu                           latest    edbfe74c41f8   8 weeks ago    78.1MB
+```
+
+Dengan demikian, kita telah berhasil membuat _image_ Docker sendiri menggunakan _Dockerfile_.
+
+## Membuat Image Docker dari Container yang Telah Dijalankan
+
+Selain menggunakan _Dockerfile_, kita juga bisa membuat _image_ Docker dari _container_ yang telah dijalankan.
+Untuk membuat _image_ Docker dari _container_ yang telah dijalankan, kita bisa menggunakan perintah `docker commit`.
+
+Perintah untuk membuat _image_ Docker dari _container_ yang telah dijalankan adalah sebagai berikut:
+
+```bash
+> docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]
+```
+
+<Callout>
+    **CONTAINER** adalah ID atau nama _container_ yang ingin diubah menjadi _image_.<br/>
+    **REPOSITORY** adalah nama _image_ baru yang akan dibuat.<br/>
+    **TAG** adalah versi dari _image_ tersebut. Jika tidak ada tag, maka Docker akan memberikan tag `latest`.
+</Callout>
+
+Referensi: [https://docs.docker.com/engine/reference/commandline/commit/](https://docs.docker.com/engine/reference/commandline/commit/)
+
+Berikut adalah langkah-langkah untuk membuat _image_ Docker dari _container_ yang telah dijalankan:
+
+<Callout>
+    Asumsi kita memiliki _container_ dengan nama `my-nginx` yang telah dijalankan.
+</Callout>
+
+1. Jalankan _container_ yang ingin diubah menjadi _image_.
+2. Buka terminal atau _command prompt_.
+3. Jalankan perintah berikut untuk membuat _image_ dari _container_ tersebut:
+```bash
+> docker commit my-nginx my-nginx-image
+```
+4. Tunggu hingga proses selesai.
+5. Setelah proses selesai, _image_ `my-nginx-image` akan tersedia di _local machine_.
+```bash
+> docker images
+
+REPOSITORY                       TAG       IMAGE ID       CREATED        SIZE
+my-nginx-image                   latest    7a2b3b1b0cde   2 minutes ago  78.1MB
+fedora                           latest    eca85b75dc19   11 days ago    222MB
+alpine                           3.20.3    91ef0af61f39   2 weeks ago    7.8MB
+alpine                           latest    91ef0af61f39   2 weeks ago    7.8MB
+ubuntu                           latest    edbfe74c41f8   8 weeks ago    78.1MB
+```
+
+Dengan demikian, kita telah berhasil membuat _image_ Docker dari _container_ yang telah dijalankan.

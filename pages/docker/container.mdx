@@ -1,0 +1,138 @@
+import { Callout } from 'nextra/components';
+
+# Container Docker
+
+Pada halaman ini, akan membahas mengenai perintah - perintah lanjutan mengenai _Container_ pada Docker seperti membuat, menjalankan, memberhentikan dan menghapus container pada docker. Selain itu akan membahas beberapa pengaturan lanjutan seperti membuka PORT pada container.
+
+## Membuat Container
+
+Untuk membuat container pada docker, kita bisa menggunakan perintah `docker run`. Berikut adalah contoh perintah untuk membuat container pada docker:
+
+```bash
+> docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+```
+
+Referensi: [https://docs.docker.com/engine/reference/commandline/run/](https://docs.docker.com/engine/reference/commandline/run/)
+
+Berikut adalah contoh langkah-langkah untuk membuat container pada docker:
+```bash
+> docker run -it --name my-ubuntu ubuntu:latest
+```
+
+Setelah itu akan muncul prompt baru yang menunjukkan bahwa kita sudah masuk ke dalam container dengan nama `my-ubuntu`.
+```bash
+root@<container_id>:/#
+```
+
+## Melihat Daftar Container
+
+Untuk melihat daftar container yang sedang berjalan pada docker, kita bisa menggunakan perintah `docker ps`. 
+Berikut adalah contoh perintah untuk melihat daftar container yang sedang berjalan pada docker:
+
+```bash
+> docker ps [OPTIONS]
+```
+
+Referensi: [https://docs.docker.com/engine/reference/commandline/ps/](https://docs.docker.com/engine/reference/commandline/ps/)
+
+Berikut adalah contoh langkah-langkah untuk melihat daftar container yang sedang berjalan pada docker:
+```bash
+> docker ps
+
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS         PORTS     NAMES
+fba6dd330e8f   ubuntu    "/bin/bash"   2 minutes ago   Up 2 minutes             my-ubuntu
+89f8b2cb2e2d   fedora    "/bin/bash"   5 minutes ago   Up 5 minutes             server-fedora
+```
+
+## Menjalankan Container yang Berhenti
+
+Untuk menjalankan container yang berhenti, kita bisa menggunakan perintah `docker start`.
+Berikut adalah contoh perintah untuk menjalankan container yang berhenti:
+
+<Callout>
+    Cara melihat container yang berhenti adalah dengan menggunakan perintah `docker ps -a`.
+    Jika container berhenti, maka statusnya akan menjadi `Exited`.
+</Callout>
+
+```bash
+> docker start [OPTIONS] CONTAINER
+```
+
+Referensi: [https://docs.docker.com/engine/reference/commandline/start/](https://docs.docker.com/engine/reference/commandline/start/)
+
+Berikut adalah contoh langkah-langkah untuk menjalankan container yang berhenti:
+```bash
+> docker start my-ubuntu
+```
+
+Setelah itu, container `my-ubuntu` akan berjalan kembali dapat dilihat dengan perintah `docker ps`.
+```bash
+> docker ps
+
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS                       PORTS       NAMES
+fba6dd330e8f   ubuntu    "/bin/bash"   2 minutes ago   Up 2 minutes                             my-ubuntu
+89f8b2cb2e2d   fedora    "/bin/bash"   5 minutes ago   Exited (2) 31 hours ago                  server-fedora
+```
+
+## Memberhentikan Container
+
+Untuk memberhentikan container yang sedang berjalan, kita bisa menggunakan perintah `docker stop`.
+Berikut adalah contoh perintah untuk memberhentikan container yang sedang berjalan:
+
+```bash
+> docker stop [OPTIONS] CONTAINER
+```
+
+Referensi: [https://docs.docker.com/engine/reference/commandline/stop/](https://docs.docker.com/engine/reference/commandline/stop/)
+
+Berikut adalah contoh langkah-langkah untuk memberhentikan container yang sedang berjalan:
+```bash
+> docker stop my-ubuntu
+
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS                       PORTS       NAMES
+fba6dd330e8f   ubuntu    "/bin/bash"   2 minutes ago   Exited (2) 2 Seconds ago                 my-ubuntu
+89f8b2cb2e2d   fedora    "/bin/bash"   5 minutes ago   Exited (2) 31 hours ago                  server-fedora
+```
+
+## Menghapus Container
+
+Untuk menghapus container yang berhenti, kita bisa menggunakan perintah `docker rm`.
+Berikut adalah contoh perintah untuk menghapus container yang berhenti:
+
+```bash
+> docker rm [OPTIONS] CONTAINER
+```
+
+<Callout>
+    Jika container sedang berjalan, maka kita harus memberhentikan container tersebut terlebih dahulu sebelum menghapusnya.
+</Callout>
+
+Referensi: [https://docs.docker.com/engine/reference/commandline/rm/](https://docs.docker.com/engine/reference/commandline/rm/)
+
+Berikut adalah contoh langkah-langkah untuk menghapus container yang berhenti:
+```bash
+> docker rm my-ubuntu
+
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS                       PORTS       NAMES
+89f8b2cb2e2d   fedora    "/bin/bash"   5 minutes ago   Exited (2) 31 hours ago                  server-fedora
+```
+
+## Membuka PORT pada Container
+
+PORT adalah sebuah mekanisme yang digunakan untuk menghubungkan container dengan _local machine_ atau container lainnya.
+
+Untuk membuka PORT pada container, kita bisa menggunakan perintah `docker run -p`.
+Berikut adalah contoh perintah untuk membuka PORT pada container:
+
+```bash
+> docker run -p [HOST_PORT]:[CONTAINER_PORT] IMAGE
+```
+
+Referensi: [https://docs.docker.com/engine/reference/commandline/run/](https://docs.docker.com/engine/reference/commandline/run/)
+
+Berikut adalah contoh langkah-langkah untuk membuka PORT pada container:
+```bash
+> docker run -p 8080:80 nginx
+```
+
+Setelah itu, PORT 80 pada container akan di-_mapping_ ke PORT 8080 pada _local machine_.

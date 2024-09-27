@@ -1,0 +1,57 @@
+import { Callout } from 'nextra/components';
+
+# Perintah Utility Docker
+
+Pada halaman ini, akan membahas mengenai perintah-perintah yang sering digunakan pada Docker. Perintah-perintah ini sangat berguna untuk melakukan berbagai operasi pada Docker seperti melakukan copy file dari dan ke container, melihat log container, dan lain sebagainya.
+
+## Copy File dari dan ke Container
+
+Untuk melakukan copy file dari dan ke container, kita bisa menggunakan perintah `docker cp`. Berikut adalah contoh perintah untuk melakukan copy file dari dan ke container:
+
+```bash
+> docker cp [OPTIONS] SRC_PATH CONTAINER:DEST_PATH
+```
+
+atau melakukan copy file dari container ke host:
+
+```bash
+> docker cp [OPTIONS] CONTAINER:SRC_PATH DEST_PATH
+```
+
+Referensi: [https://docs.docker.com/engine/reference/commandline/cp/](https://docs.docker.com/engine/reference/commandline/cp/)
+
+Berikut adalah contoh langkah-langkah untuk melakukan copy file dari dan ke container:
+
+1. Copy file dari host ke container:
+```bash
+> docker cp file.txt my-ubuntu:/path/to/destination
+```
+
+2. Copy file dari container ke host:
+```bash
+> docker cp my-ubuntu:/path/to/file.txt /path/to/destination
+```
+
+## Melihat Log Container
+
+Untuk melihat log container, kita bisa menggunakan perintah `docker logs`. Berikut adalah contoh perintah untuk melihat log container:
+
+```bash
+> docker logs [OPTIONS] CONTAINER
+```
+<Callout>
+    **CONTAINER** adalah ID atau nama container yang ingin dilihat log-nya.
+</Callout>
+
+Referensi: [https://docs.docker.com/engine/reference/commandline/logs/](https://docs.docker.com/engine/reference/commandline/logs/)
+
+## Melihat Statistik Container
+
+Untuk melihat statistik container, kita bisa menggunakan perintah `docker stats`.    
+```bash
+> docker stats [OPTIONS] [CONTAINER...]
+```
+
+Referensi: [https://docs.docker.com/engine/reference/commandline/stats/](https://docs.docker.com/engine/reference/commandline/stats/)
+
+

@@ -1,0 +1,91 @@
+import { Callout } from 'nextra/components';
+
+# Dasar - Dasar Docker
+
+Pada halaman ini, kita akan membahas dasar-dasar Docker, termasuk perbedaan antara _image_ dan _container_, cara melakukan pull _image_ dari [Docker Hub](https://hub.docker.com), dan cara membuat dan menjalankan _container_ Docker.
+
+## Perbedaan Image dan Container
+
+Dalam Docker, terdapat dua konsep utama yang sering digunakan, yaitu _image_ dan _container_. Kedua konsep ini memiliki perbedaan yang mendasar, yaitu:
+
+- **Image**: _Image_ adalah _template_ yang berisi semua dependensi dan _library_ yang diperlukan untuk menjalankan aplikasi. _Image_ bersifat _read-only_, sehingga tidak dapat diubah setelah _image_ dibuat. _Image_ digunakan untuk membuat kontainer Docker.
+- **Container**: Kontainer adalah _instance_ dari _image_ yang berjalan di lingkungan terisolasi. Kontainer Docker bersifat _read-write_, sehingga pengguna dapat melakukan perubahan di dalam kontainer. Kontainer Docker dapat dijalankan, dihentikan, dihapus, dan dihentikan kembali.
+
+![Perbedaan Image dan Container](public/images/about-dockerworking.jpeg)
+
+## Pull Image dari Docker Hub
+
+[Docker Hub](https://hub.docker.com/) adalah _cloud-based registry_ yang menyediakan berbagai _image_ Docker yang dapat digunakan oleh pengguna. Pengguna dapat mencari _image_ Docker yang dibutuhkan di Docker Hub dan melakukan _pull_ _image_ tersebut ke _local machine_.
+
+Pull _image_ dari Docker Hub artinya mengunduh _image_ Docker dari Docker Hub ke _local machine_. 
+
+```
+docker pull [OPTIONS] NAME:[TAG]
+```
+
+<Callout>
+    **NAME** adalah nama image yang berada pada Docker Hub<br/>
+    **TAG** adalah versi dari image tersebut Note: Jika tidak ada tag, maka Docker akan mengunduh versi terbaru dari image tersebut (latest).
+</Callout>
+
+Referensi: [https://docs.docker.com/engine/reference/commandline/pull/](https://docs.docker.com/engine/reference/commandline/pull/)
+
+Berikut adalah langkah-langkah untuk melakukan _pull_ _image_ dari Docker Hub:
+
+1. Buka terminal atau _command prompt_.
+2. Jalankan perintah berikut untuk melakukan _pull_ _image_ `ubuntu` dari Docker Hub:
+```bash
+> docker pull ubuntu:latest
+```
+
+atau jika ingin mengunduh versi tertentu dari _image_ `ubuntu`, misalnya versi `20.10`:
+```bash
+> docker pull ubuntu:20.10
+```
+
+3. Tunggu hingga proses _pull_ _image_ selesai.
+4. Setelah proses selesai, _image_ `ubuntu` akan tersedia di _local machine_.
+5. Untuk melihat daftar _image_ yang telah diunduh, jalankan perintah berikut:
+```bash
+> docker images
+
+REPOSITORY                       TAG       IMAGE ID       CREATED        SIZE
+fedora                           latest    eca85b75dc19   11 days ago    222MB
+alpine                           3.20.3    91ef0af61f39   2 weeks ago    7.8MB
+alpine                           latest    91ef0af61f39   2 weeks ago    7.8MB
+ubuntu                           latest    edbfe74c41f8   8 weeks ago    78.1MB
+```
+
+## Membuat dan Menjalankan Container Docker
+
+Setelah _image_ berhasil diunduh, selanjutnya kita akan membuat dan menjalankan _container_ Docker dari _image_ yang telah diunduh.
+
+perintah untuk membuat dan menjalankan _container_ Docker adalah sebagai berikut:
+
+```bash
+> docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+```
+
+Referensi: [https://docs.docker.com/engine/reference/commandline/run/](https://docs.docker.com/engine/reference/commandline/run/)
+
+Berikut adalah langkah-langkah untuk membuat dan menjalankan _container_ Docker:
+
+1. Buka terminal atau _command prompt_.
+2. Jalankan perintah berikut untuk membuat _container_ dari _image_ `ubuntu`:
+```bash
+> docker run -it --name my-ubuntu ubuntu:latest
+```
+3. Setelah itu akan muncul _prompt_ baru yang menunjukkan bahwa kita sudah masuk ke dalam _container_ dengan nama `my-ubuntu`.
+```bash
+root@<container-id>:/#
+```
+4. Selamat, Anda sudah berhasil membuat dan menjalankan _container_ Docker!
+
+<Callout>
+Untuk keluar dari _container_, Anda dapat menekan tombol `Ctrl + D` atau menjalankan perintah `exit`.
+</Callout>
+
+Pada saat ini kita sudah berhasil membuat dan menjalankan _container_ Docker dari _image_ `ubuntu`. Selanjutnya, kita dapat melakukan berbagai operasi di dalam _container_ tersebut, seperti menginstall aplikasi, mengubah konfigurasi, dan lain sebagainya.
+
+
+
