@@ -1,0 +1,49 @@
+# Package Manager
+
+Package manager adalah alat yang digunakan untuk mengelola paket perangkat lunak pada sistem operasi Linux. Package manager memudahkan pengguna untuk menginstal, menghapus, dan mengupdate paket perangkat lunak. Package manager juga memastikan bahwa paket perangkat lunak yang diinstal memiliki dependensi yang diperlukan.
+
+## Jenis-jenis Package Manager
+
+Ada beberapa jenis package manager yang digunakan pada sistem operasi Linux, diantaranya adalah:
+
+### 1. **APT (Advanced Package Tool)**
+
+APT adalah package manager yang digunakan pada distro Linux berbasis Debian, seperti Ubuntu dan Linux Mint. APT menggunakan file `.deb` sebagai format paket perangkat lunak.
+
+Contoh perintah APT:
+
+- `apt-get install [PACKAGE]`: Menginstal paket perangkat lunak.
+- `apt-get remove [PACKAGE]`: Menghapus paket perangkat lunak.
+- `apt-get update`: Memperbarui daftar paket perangkat lunak.
+- `apt-get upgrade`: Memperbarui paket perangkat lunak yang sudah terinstal.
+
+### 2. **YUM (Yellowdog Updater, Modified)**
+
+YUM adalah package manager yang digunakan pada distro Linux berbasis Red Hat, seperti CentOS dan Fedora. YUM menggunakan file `.rpm` sebagai format paket perangkat lunak.
+
+Contoh perintah YUM:
+
+- `yum install [PACKAGE]`: Menginstal paket perangkat lunak.
+- `yum remove [PACKAGE]`: Menghapus paket perangkat lunak.
+- `yum update`: Memperbarui paket perangkat lunak yang sudah terinstal.
+
+### 3. **DNF (Dandified YUM)**
+
+DNF adalah package manager yang digunakan pada distro Linux berbasis Red Hat, seperti Fedora. DNF merupakan pengganti dari YUM yang lebih cepat dan efisien. DNF juga menggunakan file `.rpm` sebagai format paket perangkat lunak.
+
+Contoh perintah DNF:
+
+- `dnf install [PACKAGE]`: Menginstal paket perangkat lunak.
+- `dnf remove [PACKAGE]`: Menghapus paket perangkat lunak.
+- `dnf update`: Memperbarui paket perangkat lunak yang sudah terinstal.
+- `dnf search [PACKAGE]`: Mencari paket perangkat lunak.
+
+### 4. **Pacman**
+
+Pacman adalah package manager yang digunakan pada distro Linux Arch Linux. Pacman menggunakan file `.pkg.tar.xz` sebagai format paket perangkat lunak.
+
+Contoh perintah Pacman:
+
+- `pacman -S [PACKAGE]`: Menginstal paket perangkat lunak.
+- `pacman -R [PACKAGE]`: Menghapus paket perangkat lunak.
+- `pacman -Syu`: Memperbarui daftar paket perangkat lunak dan paket yang sudah terinstal.

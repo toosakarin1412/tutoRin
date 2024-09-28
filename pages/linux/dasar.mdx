@@ -1,0 +1,175 @@
+# Perintah Dasar Linux
+
+Linux pada dasarnya adalah sebuah sistem operasi yang berbasis Unix. Oleh karena itu, banyak perintah yang digunakan pada sistem operasi Unix juga bisa digunakan pada sistem operasi Linux. 
+
+Dengan kata lain, linux adalah sistem operasi yang berbasis teks. Sehingga, untuk melakukan berbagai operasi, kita harus menggunakan perintah-perintah yang tersedia.
+
+Berikut adalah beberapa perintah dasar yang sering digunakan pada sistem operasi Linux:
+
+## Perintah Dasar Navigasi
+
+### 1. `pwd`
+
+Perintah `pwd` (print working directory) digunakan untuk menampilkan direktori kerja saat ini.
+
+```bash
+> pwd
+/home/username
+```
+
+### 2. `ls`
+
+Perintah `ls` (list) digunakan untuk menampilkan daftar file dan direktori pada direktori kerja saat ini.
+
+```bash
+> ls
+Desktop  Documents  Downloads  Music  Pictures  Videos
+```
+
+### 3. `cd`
+
+Perintah `cd` (change directory) digunakan untuk berpindah direktori.
+
+Perintah untuk berpindah ke direktori lain:
+
+```bash
+> cd [direktori]
+```
+
+Contoh:
+
+```bash
+> cd Documents
+> pwd
+/home/username/Documents
+```
+
+Untuk kembali ke direktori sebelumnya, kita bisa menggunakan perintah `cd ..`.
+
+```bash
+> cd ..
+> pwd
+/home/username
+```
+
+### 4. `mkdir`
+
+Perintah `mkdir` (make directory) digunakan untuk membuat direktori baru.
+
+Perintah untuk membuat direktori:
+
+```bash
+> mkdir [nama-direktori]
+```
+
+Contoh:
+
+```bash
+> mkdir Projects
+> ls
+Desktop  Documents  Downloads  Music  Pictures  Projects  Videos
+```
+
+### 5. `rm`
+
+Perintah `rm` (remove) digunakan untuk menghapus file atau direktori.
+
+Perintah untuk menghapus file:
+
+```bash
+> rm [OPTION] [nama-file]
+```
+
+Contoh:
+
+```bash
+> rm file.txt
+```
+
+Jika ingin menghapus direktori beserta isinya, kita bisa menggunakan option `-r`.
+
+```bash
+> rm -r Projects
+```
+
+## Perintah Dasar Berkas
+
+### 1. `touch`
+
+Perintah `touch` digunakan untuk membuat file kosong.
+
+Perintah untuk membuat file:
+
+```bash
+> touch [nama-file]
+```
+
+Contoh:
+
+```bash
+> touch file.txt
+> ls
+Desktop  Documents  Downloads  Music  Pictures  Videos  file.txt
+```
+
+### 2. `cat`
+
+Perintah `cat` (concatenate) digunakan untuk menampilkan isi file.
+
+Perintah untuk menampilkan isi file:
+
+```bash
+> cat [nama-file]
+```
+
+Contoh: 
+
+```bash
+> cat file.txt
+Hello, World!
+```
+
+### 3. `cp`
+
+Perintah `cp` (copy) digunakan untuk menyalin file atau direktori.
+
+Perintah untuk menyalin file:
+
+```bash
+cp [OPTION] [source] [destination]
+```
+
+Contoh:
+
+```bash
+> cp file.txt file-copy.txt
+```
+
+Jika ingin menyalin direktori beserta isinya, kita bisa menggunakan option `-r`.
+
+```bash
+> cp -r Documents Documents-copy
+```
+
+### 4. `mv`
+
+Perintah `mv` (move) digunakan untuk memindahkan file atau direktori.
+
+Perintah untuk memindahkan file:
+
+```bash
+mv [OPTION] [source] [destination]
+```
+
+Contoh:
+
+```bash
+> mv file.txt Documents
+```
+
+Perintah untuk memindahkan direktori:
+
+```bash
+mv -r [source] [destination]
+```
+
