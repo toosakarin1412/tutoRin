@@ -1,0 +1,51 @@
+# Konfigurasi Nginx
+
+Setelah menginstal Nginx, langkah selanjutnya adalah melakukan konfigurasi. Konfigurasi Nginx terdiri dari dua bagian, yaitu konfigurasi global dan konfigurasi spesifik untuk setiap situs web.
+
+## Konfigurasi Global
+
+Konfigurasi global Nginx terletak di file `nginx.conf`. File ini berisi konfigurasi yang berlaku untuk seluruh situs web yang di-handle oleh Nginx. Berikut adalah beberapa konfigurasi global yang sering digunakan:
+
+Letak dari file `nginx.conf` biasanya berada di <br/> `/etc/nginx/nginx.conf` <br/> atau <br/> `/usr/local/nginx/conf/nginx.conf`.
+
+## Konfigurasi Spesifik Situs Web
+
+Konfigurasi spesifik situs web terletak di direktori `/etc/nginx/conf.d/` atau `/etc/nginx/sites-available/`. Setiap situs web memiliki file konfigurasi tersendiri. Berikut adalah contoh konfigurasi spesifik situs web:
+
+```nginx
+server {
+    listen 80;
+    server_name example.com;
+    root /var/www/html;
+    index index.html;
+}
+```
+
+Konfigurasi di atas mendefinisikan situs web yang akan di-handle oleh Nginx. Konfigurasi tersebut berarti Nginx akan menangani situs web `example.com` yang berada di direktori `/var/www/html` dan file index-nya adalah `index.html`. Hal tersebut berarti jika kita mengakses `http://example.com`, maka Nginx akan menampilkan halaman yang ada di direktori `/var/www/html`.
+
+## Menjalankan Nginx
+
+Setelah melakukan konfigurasi, jalankan perintah berikut untuk me-restart Nginx:
+
+```bash
+> sudo systemctl restart nginx
+```
+
+Perintah di atas akan me-restart Nginx agar konfigurasi yang baru saja diubah dapat diterapkan.
+
+Untuk mengecek apakah konfigurasi sudah berjalan dengan baik, buka browser dan akses situs web yang telah dikonfigurasi. Jika halaman web muncul,
+berarti konfigurasi Nginx sudah berjalan dengan baik.
+
+Jika didapatkan hasil seperti di bawah ini, berarti konfigurasi Nginx sudah berhasil:
+
+![Nginx Welcome Page](public/images/nginx-berhasil.png)
+
+## Menjalankan Nginx ketika Boot
+
+Agar Nginx berjalan saat boot, jalankan perintah berikut:
+
+```bash
+> sudo systemctl enable nginx
+```
+
+Perintah di atas akan mengaktifkan Nginx agar berjalan saat boot. Dengan begitu, Nginx akan otomatis berjalan saat server dihidupkan.

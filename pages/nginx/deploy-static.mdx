@@ -1,0 +1,40 @@
+# Deploy Web Statis dengan Nginx
+
+Setelah menginstal dan melakukan konfigurasi Nginx, langkah selanjutnya adalah mendeploy web statis. Web statis adalah jenis situs web yang berisi file HTML, CSS, dan JavaScript tanpa adanya database. Web statis biasanya digunakan untuk situs web yang tidak memerlukan interaksi dengan pengguna, seperti situs web perusahaan, portofolio, atau blog pribadi.
+
+Berikut adalah langkah-langkah untuk mendeploy web statis dengan Nginx:
+
+## 1. Persiapkan File Web Statis
+
+Pertama, siapkan file web statis yang akan di-deploy. File web statis biasanya berupa file HTML, CSS, dan JavaScript. File-file tersebut dapat dibuat menggunakan text editor seperti Visual Studio Code, Sublime Text, atau Notepad.
+
+Berikut adalah contoh struktur direktori file web statis:
+
+```plaintext
+web-statis/
+├── index.html
+├── about.html
+├── contact.html
+├── css/
+│   └── style.css
+└── js/
+    └── script.js
+```
+
+atau kalian bisa menggunakan file web statis berikut: [File Web Statis](https://drive.google.com/file/d/18pIBBKcXs-EtbFFEHHsBFqHCu519kL1L/view?usp=sharing)
+
+## 2. Salin File Web Statis ke Direktori Nginx
+
+Setelah file web statis siap, salin file tersebut ke direktori Nginx. Direktori Nginx biasanya berada di `/usr/share/nginx/html/`. Salin file web statis ke direktori tersebut dengan perintah berikut:
+
+```bash
+> cp -r /path/to/web-statis/* /usr/share/nginx/html/
+```
+
+Perintah di atas akan menyalin semua file dan direktori dari `web-statis` ke direktori Nginx.
+
+## 3. Akses Web Statis
+
+Terakhir, buka browser dan akses `http://localhost`. Jika muncul halaman utama web statis, berarti deploy web statis dengan Nginx berhasil.
+
+Dengan langkah-langkah di atas, Anda telah berhasil mendeploy web statis menggunakan Nginx. Selamat mencoba!

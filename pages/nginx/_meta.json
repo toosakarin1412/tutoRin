@@ -1,0 +1,6 @@
+{
+    "index": "Pengenalan NGINX",
+    "install": "Instalasi NGINX",
+    "konfigurasi": "Konfigurasi NGINX",
+    "deploy-static": "Deploy Web Static dengan NGINX"
+}

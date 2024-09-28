@@ -1,0 +1,96 @@
+import { Callout } from 'nextra/components'
+
+# Instalasi Nginx
+
+Ada beberapa cara untuk menginstal Nginx di sistem operasi Linux. Nginx dapat diinstal menggunakan package manager bawaan dari sistem operasi atau mengunduh binary dari situs resmi Nginx. Selain itu, Nginx juga dapat diinstal menggunakan Docker.
+
+## Instalasi Nginx di Ubuntu
+
+Berikut adalah cara menginstal Nginx di Ubuntu:
+
+1. Buka terminal.
+2. Jalankan perintah berikut untuk mengupdate package index:
+
+```bash
+> sudo apt update
+```
+
+3. Jalankan perintah berikut untuk menginstal Nginx:
+
+```bash
+> sudo apt install nginx
+```
+
+4. Setelah proses instalasi selesai, jalankan perintah berikut untuk memulai Nginx:
+
+```bash
+> sudo systemctl start nginx
+```
+
+5. Jalankan perintah berikut untuk mengaktifkan Nginx agar berjalan saat boot:
+
+```bash
+> sudo systemctl enable nginx
+```
+
+6. Terakhir, buka browser dan akses `http://localhost`. Jika muncul halaman selamat datang Nginx, berarti instalasi Nginx berhasil.
+
+## Instalasi Nginx di CentOS
+
+Berikut adalah cara menginstal Nginx di CentOS:
+
+1. Buka terminal.
+
+2. Jalankan perintah berikut untuk mengupdate package index:
+
+```bash
+> sudo yum check-update
+```
+
+3. Jalankan perintah berikut untuk menginstal Nginx:
+
+```bash
+> sudo yum install nginx
+```
+
+4. Setelah proses instalasi selesai, jalankan perintah berikut untuk memulai Nginx:
+
+```bash
+> sudo systemctl start nginx
+```
+
+5. Jalankan perintah berikut untuk mengaktifkan Nginx agar berjalan saat boot:
+
+```bash
+> sudo systemctl enable nginx
+```
+
+6. Terakhir, buka browser dan akses `http://localhost`. Jika muncul halaman selamat datang Nginx, berarti instalasi Nginx berhasil.
+
+## Instalasi Nginx di Docker
+
+Berikut adalah cara menginstal Nginx di Docker:
+
+1. Buka terminal.
+
+2. Jalankan perintah berikut untuk mengunduh image Nginx dari Docker Hub:
+
+```bash
+> docker pull nginx
+```
+
+3. Jalankan perintah berikut untuk menjalankan container Nginx:
+
+```bash
+> docker run --name my-nginx -d -p 80:80 nginx
+```
+
+<Callout>
+    `-d` digunakan untuk menjalankan container di background.\
+    `-p 80:80` digunakan untuk meneruskan port 80 dari host ke port 80 container.
+</Callout>
+
+
+4. Terakhir, buka browser dan akses `http://localhost`. Jika muncul halaman selamat datang Nginx, berarti instalasi Nginx di Docker berhasil.
+
+Setelah melakukan instalasi Nginx, selanjutnya adalah konfigurasi Nginx agar dapat digunakan sebagai web server.
