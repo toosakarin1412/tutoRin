@@ -4,13 +4,13 @@
   "linux": "Linux",
   "nginx": "Nginx",
   "about": {
-    "title": "About",
+    "title": "👀 About",
     "type": "page"
   },
   "contact": {
-    "title": "Contact ↗",
+    "title": "📫 Contact",
     "type": "page",
-    "href": "https://twitter.com/shuding_",
+    "href": "https://dikywa.my.id",
     "newWindow": true
   }
 }
