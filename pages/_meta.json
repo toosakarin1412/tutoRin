@@ -3,6 +3,7 @@
   "docker": "Docker",
   "linux": "Linux",
   "nginx": "Nginx",
+  "search-engine": "Search Engine",
   "about": {
     "title": "👀 About",
     "type": "page"
