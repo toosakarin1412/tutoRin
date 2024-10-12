@@ -1,0 +1,165 @@
+import { Callout } from "nextra/components"
+
+# Melakukan Crawling dan Indexing Data dengan Apache Nutch dan Apache Solr
+
+Setelah kita selesai menginstalasi Apache Nutch dan Apache Solr, langkah selanjutnya adalah melakukan crawling dan indexing data dengan Apache Nutch dan Apache Solr.
+
+## Crawling Data dengan Apache Nutch
+
+Apache Nutch adalah sebuah web crawler yang digunakan untuk mengumpulkan data dari web. Apache Nutch dapat digunakan untuk mengumpulkan data dari berbagai sumber, seperti halaman web, file, dan database. Apache Nutch juga dapat digunakan untuk melakukan crawling pada web secara terjadwal.
+
+Berikut adalah langkah-langkah yang akan kita lakukan untuk melakukan crawling data dengan Apache Nutch:
+
+### 1. Membuat Konfigurasi Crawl
+
+1. Membuat sebuah folder dengan nama urls dan menambahkan seed.txt di dalamnya.
+
+```bash
+> mkdir urls
+
+> touch urls/seed.txt
+```
+
+Lalu tambahkan url yang akan di crawl ke dalam file seed.txt.
+
+```bash
+echo "https://tekno.kompas.com/" > urls/seed.txt
+```
+
+<Callout>
+    Pada tutorial ini akan melakukan crawling pada website https://tekno.kompas.com/ silahkan ubah sendiri sesuai dengan kebutuhan.
+</Callout>
+
+2. Tambahkan konfigurasi `regex-urlfilter.txt` pada folder `conf`.
+
+Untuk memfilter url yang akan di crawl, kita perlu menambahkan konfigurasi `regex-urlfilter.txt` pada folder `conf`. Agar Apache Nutch hanya melakukan crawling pada website yang diinginkan.
+
+Tambahkan pada file `regex-urlfilter.txt`:
+
+```
+# accept anything else
++^https?://([a-z0-9-]+\.)*tekno\.kompas\.com/
+```
+
+<Callout>
+    Pada konfigurasi di atas, kita hanya akan melakukan crawling pada website `https://tekno.kompas.com/`.
+    Dan akan mengabaikan url lain yang tidak memenuhi regex diatas.
+</Callout>
+
+3. Jalankan perintah berikut untuk melakukan Inject Url kedalam Crawler.
+
+```bash
+bin/nutch inject crawl/crawldb urls
+```
+
+### 2. Melakukan Crawling
+
+Pada Apache Nutch terdapat beberapa tahapan dalam melakukan crawling, yaitu:
+
+1. Generate: Membuat segments yang berisi daftar url yang akan di crawl.
+2. Fetch: Mengambil konten dari URL yang telah di generate.
+3. Parse: Mengurai konten yang telah diambil.
+4. Update: Menyimpan hasil parsing ke dalam database.
+5. Ulangi langkah 1-4 hingga jumlah url halaman yang didapatkan sesuai keinginan.
+
+#### Melakukan Generate Segment
+
+```bash
+bin/nutch generate crawl/crawldb crawl/segments
+```
+
+<Callout>
+    Perintah di atas akan membuat segment baru pada folder `crawl/segments`.
+</Callout>
+
+#### Melakukan Fetch
+
+```bash
+bin/nutch fetch crawl/segments/*
+```
+
+<Callout>
+    Perintah di atas akan melakukan fetch pada segment yang telah di generate sebelumnya.
+    Ganti tanda * dengan nama segment yang ingin di fetch
+</Callout>
+
+#### Melakukan Parse
+
+```bash
+bin/nutch parse crawl/segments/*
+```
+
+<Callout>
+    Perintah di atas akan melakukan parse pada segment yang telah di fetch sebelumnya.
+    Ganti tanda * dengan nama segment yang ingin di parse
+</Callout>
+
+#### Melakukan Update
+
+```bash
+bin/nutch updatedb crawl/crawldb crawl/segments/*
+```
+
+<Callout>
+    Perintah di atas akan melakukan update pada database crawl.
+    Ganti tanda * dengan nama segment yang ingin di update
+</Callout>
+
+#### Melakukan Ulangi Langkah 1-4
+
+Ulangi langkah 1 - 4 hingga jumlah url halaman yang didapatkan sesuai keinginan.
+
+Untuk mengecek jumlah url yang telah di crawl, jalankan perintah berikut:
+
+```bash
+bin/nutch readdb crawl/crawldb -stats
+```
+
+Lalu akan muncul output seperti berikut:
+
+```
+...
+2024-10-13 00:11:49,382 INFO o.a.n.c.CrawlDbReader [main] status 1 (db_unfetched):	3463
+2024-10-13 00:11:49,383 INFO o.a.n.c.CrawlDbReader [main] status 2 (db_fetched):	538
+2024-10-13 00:11:49,383 INFO o.a.n.c.CrawlDbReader [main] status 3 (db_gone):	19
+2024-10-13 00:11:49,383 INFO o.a.n.c.CrawlDbReader [main] status 4 (db_redir_temp):	5
+...
+```
+
+Pada output di atas, kita bisa melihat jumlah url yang telah di crawl, jumlah url yang belum di fetch, jumlah url yang telah di fetch, jumlah url yang telah di hapus, dan jumlah url yang telah di redirect.
+
+Referensi: [https://cwiki.apache.org/confluence/display/NUTCH/NutchTutorial](https://cwiki.apache.org/confluence/display/NUTCH/NutchTutorial)
+
+### 3. Melakukan Indexing Data dengan Apache Solr
+
+Setelah kita selesai melakukan crawling data dengan Apache Nutch, langkah selanjutnya adalah melakukan indexing data dengan Apache Solr.
+
+Berikut adalah langkah-langkah yang akan kita lakukan untuk melakukan indexing data dengan Apache Nitch dan Apache Solr:
+
+1. Melakukan Invert Links
+
+```bash
+bin/nutch invertlinks crawl/linkdb -dir crawl/segments
+```
+
+<Callout>
+    Perintah di atas akan melakukan invert links pada database link. Hal ini dilakukan agar Apache Solr dapat melakukan indexing pada data yang telah di crawl.
+</Callout>
+
+2. Melakukan Indexing
+
+```bash
+bin/nutch index crawl/crawldb/ -linkdb crawl/linkdb/ -dir crawl/segments -filter -normalize -deleteGone
+```
+
+<Callout>
+    Perintah di atas akan melakukan indexing pada database crawl. Hal ini dilakukan agar Apache Solr dapat melakukan indexing pada data yang telah di crawl.
+</Callout>
+
+Selamat, Anda telah berhasil melakukan crawling dan indexing data dengan Apache Nutch dan Apache Solr. Pada modul selanjutnya Anda dapat melakukan pencarian data dengan Apache Solr.
+
+
+
+
+
+

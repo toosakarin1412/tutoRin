@@ -1,0 +1,51 @@
+import { Callout } from 'nextra/components';
+
+# Melakukan Query Data dengan Apache Solr
+
+Setelah kita selesai melakukan crawling dan indexing data dengan Apache Nutch dan Apache Solr, langkah selanjutnya adalah melakukan query data dengan Apache Solr.
+
+## Query Data dengan Apache Solr menggunakan HTTP API
+
+Apache Solr menyediakan HTTP API yang digunakan untuk melakukan query data. Berikut adalah contoh query data dengan Apache Solr menggunakan HTTP API:
+
+```bash
+curl http://localhost:8983/solr/CORE/select?q=<query>
+```
+
+Contoh query data dengan Apache Solr menggunakan HTTP API:
+
+```bash
+curl http://localhost:8983/solr/nutch/select?q=title:teknologi
+```
+
+Pada contoh di atas, kita melakukan query data pada core `nutch` dengan query `title:teknologi`.
+
+Hasil yang didapatkan dari query data tersebut adalah sebuah JSON response yang berisi data yang sesuai dengan query yang kita lakukan:
+
+```json
+{
+  "responseHeader":{
+    "status":0,
+    "QTime":1,
+    "params":{
+      "q":"title:teknologi"}},
+  "response":{"numFound":1,"start":0,"docs":[
+      {
+        "title":"Teknologi Informasi",
+        "url":"https://tekno.kompas.com/teknologi-informasi",
+        "_version_":1700000000000000000}]
+  }
+}
+```
+
+## Query Data dengan Apache Solr menggunakan Query Syntax
+
+Pada halaman admin Apache Solr [http://localhost:8983/solr](http://localhost:8983/solr) juga menyediakan query syntax yang digunakan untuk melakukan query data. Berikut adalah contoh query data dengan Apache Solr menggunakan query syntax:
+
+```
+title:teknologi
+```
+
+Pada contoh di atas, kita melakukan query data pada field `title` dengan kata kunci `teknologi`.
+
+![Query Data dengan Apache Solr](public/images/solr-query.png)
