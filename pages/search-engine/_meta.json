@@ -1,5 +1,8 @@
 {
     "index": "Introduction",
     "config-container": "Konfigurasi Container",
-    "nutch": "Instalasi Apache Nutch"
+    "nutch": "Instalasi Apache Nutch",
+    "solr": "Instalasi Apache Solr",
+    "crawling-indexing": "Crawling dan Indexing Data",
+    "query": "Query Data dengan Solr"
 }
