@@ -1,1 +1,67 @@
+import { Callout } from 'nextra/components';
+
+# Instalasi Apache Nutch
+
+Apache Nutch adalah sebuah proyek open-source yang dikembangkan oleh Apache Software Foundation. Nutch adalah sebuah web crawler yang digunakan untuk mengumpulkan data dari web. Nutch dapat digunakan untuk mengumpulkan data dari berbagai sumber, seperti halaman web, file, dan database. Nutch juga dapat digunakan untuk melakukan crawling pada web secara terjadwal.
+
+Website: [https://nutch.apache.org/](https://nutch.apache.org/)
+
 ## Instalasi Apache Nutch
+
+Berikut adalah langkah-langkah yang akan kita lakukan:
+
+1. Download Apache Nutch dari website resmi Apache Nutch
+
+```bash
+wget https://downloads.apache.org/nutch/1.x/apache-nutch-1.XX-bin.tar.gz
+```
+
+<Callout type='warning'>
+    Ganti `1.XX` dengan versi terbaru dari Apache Nutch. Versi terbaru dari Apache Nutch dapat dilihat di [https://nutch.apache.org/downloads.html](https://nutch.apache.org/download/)
+</Callout>
+
+2. Ekstrak file `apache-nutch-1.XX-bin.tar.gz`
+
+```bash
+tar -xvf apache-nutch-1.XX-bin.tar.gz
+```
+
+3. Pindahkan folder `apache-nutch-1.XX` ke dalam folder `/opt`
+
+```bash
+mv apache-nutch-1.XX /opt
+```
+
+4. Konfigurasi Environment Variable `NUTCH_RUNTIME_HOME` pada file `.bashrc`
+
+```bash
+echo "export NUTCH_RUNTIME_HOME=/opt/apache-nutch-1.XX" >> ~/.bashrc
+source ~/.bashrc
+```
+
+5. Konfigurasi 'nutch-site.xml' pada folder `/opt/apache-nutch-1.XX/conf`
+
+Buka file `nutch-site.xml` pada folder `/opt/apache-nutch-1.XX/conf` dan tambahkan konfigurasi berikut:
+
+```xml
+<configuration>
+
+    <property>
+        <name>http.agent.name</name>
+        <value>My Nutch Spider</value>
+    </property>
+
+</configuration>
+```
+
+<Callout>
+    Ubah `My Nutch Spider` dengan nama web crawler yang ingin Anda gunakan. Nama web crawler ini akan digunakan sebagai `User-Agent` pada saat melakukan crawling pada web. 
+</Callout>
+
+**Selamat Apache Nutch telah berhasil diinstal pada sistem Anda.**
+
+Selanjutnya, kita akan melakukan instalasi Apache Solr.
+
+
+
+
