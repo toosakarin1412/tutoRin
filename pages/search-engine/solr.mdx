@@ -1,0 +1,112 @@
+import { Callout } from 'nextra/components';
+
+# Instalasi Apache Solr
+
+Apache Solr adalah sebuah proyek open-source yang dikembangkan oleh Apache Software Foundation. Solr adalah sebuah platform pencarian yang digunakan untuk melakukan pencarian teks pada data yang disimpan dalam berbagai format, seperti XML, JSON, dan CSV. Solr juga dapat digunakan untuk melakukan indexing pada data yang disimpan dalam berbagai format.
+
+Website: [https://lucene.apache.org/solr/](https://lucene.apache.org/solr/)
+
+## Instalasi Apache Solr
+
+Berikut adalah langkah-langkah yang akan kita lakukan:
+
+1. Download Apache Solr dari website resmi Apache Solr
+
+Apache Solr dapat diunduh dari website resmi Apache Solr di [https://solr.apache.org/downloads.html](https://solr.apache.org/downloads.html)
+
+<Callout>
+    Gunakan `wget` atau `curl` untuk mengunduh file Apache Solr. Pastikan Anda mengunduh versi terbaru dari Apache Solr.
+</Callout>
+
+2. Ekstrak file `solr-X.X.X.tgz`
+
+```bash
+tar -xvf solr-X.X.X.tgz
+```
+
+3. Pindahkan folder `solr-X.X.X` ke dalam folder `/opt`
+
+```bash
+mv solr-X.X.X /opt
+```
+
+4. Konfigurasi Environment Variable `APACHE_SOLR_HOME` pada file `.bashrc`
+
+```bash
+echo "export APACHE_SOLR_HOME=/opt/solr-X.X.X" >> ~/.bashrc
+source ~/.bashrc
+```
+
+## Integrasi Apache Nutch dan Apache Solr
+
+Setelah kita selesai menginstalasi Apache Nutch dan Apache Solr, langkah selanjutnya adalah mengintegrasikan Apache Nutch dengan Apache Solr. Berikut adalah langkah-langkah yang akan kita lakukan:
+
+1. Membuat folder yang berisikan konfigurasi Apache Nutch
+
+```bash
+mkdir -p ${APACHE_SOLR_HOME}/server/solr/nutch/
+```
+
+2. Salin file konfigurasi Apache Nutch ke dalam folder `${APACHE_SOLR_HOME}/server/solr/nutch/`
+
+```bash
+cp -r ${APACHE_SOLR_HOME}/server/solr/configsets/_default/* ${APACHE_SOLR_HOME}/server/solr/nutch/
+```
+
+3. Salin file `schema.xml` dari folder `${NUTCH_RUNTIME_HOME}/plugins/indexer-solr/schema.xml` ke dalam folder `${APACHE_SOLR_HOME}/server/solr/nutch/conf/`
+
+```bash
+cp ${NUTCH_RUNTIME_HOME}/plugins/indexer-solr/schema.xml ${APACHE_SOLR_HOME}/server/solr/nutch/conf/
+```
+
+4. Hapus file `managed-schema` dari folder `${APACHE_SOLR_HOME}/server/solr/nutch/conf/`
+
+```bash
+rm ${APACHE_SOLR_HOME}/server/solr/nutch/conf/managed-schema.xml
+```
+
+5. Jalankan Apache Solr
+
+```bash
+${APACHE_SOLR_HOME}/bin/solr start
+```
+
+6. Buat core baru pada Apache Solr
+
+```bash
+${APACHE_SOLR_HOME}/bin/solr create -c nutch
+```
+
+7. Selamat, Apache Nutch dan Apache Solr telah berhasil diintegrasikan!
+
+Dengan mengikuti langkah-langkah di atas, Anda telah berhasil mengintegrasikan Apache Nutch dengan Apache Solr. Selanjutnya, Anda dapat melakukan crawling dan indexing data menggunakan Apache Nutch dan Apache Solr.
+
+## Mengakses Halaman Admin Apache Solr
+
+Agar dapat mengakses halaman admin Apache Solr yang berjalan pada Docker, diperlukan settingan pada file `solr.in.sh` yang berada pada folder `${APACHE_SOLR_HOME}/bin/`. 
+Uncomment baris berikut pada file `solr.in.sh` dan ganti `127.0.0.1` dengan `0.0.0.0`:
+
+```bash
+SOLR_JETTY_HOST="0.0.0.0"
+SOLR_ZK_EMBEDDED_HOST="0.0.0.0"
+```
+
+Lalu hentikan semua instance solr yang sedang berjalan:
+
+```bash
+${APACHE_SOLR_HOME}/bin/solr stop
+```
+
+Dan jalankan kembali Apache Solr:
+
+```bash
+${APACHE_SOLR_HOME}/bin/solr start
+```
+
+Untuk mengakses halaman admin Apache Solr, buka browser web Anda dan akses URL berikut:
+
+http://localhost:8983/
+
+Kalian akan diarahkan ke halaman admin Apache Solr. Pada halaman admin Apache Solr, dapat terlihat informasi tentang core yang telah dibuat, melakukan indexing data, dan melakukan pencarian data.
+
+
