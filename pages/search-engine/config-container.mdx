@@ -1,4 +1,67 @@
+import { Callout } from 'nextra/components'
+
 # Konfigurasi Container Docker
 
 Pada tutorial ini, kita akan membangun Search Engine dengan menggunakan Apache Nutch dan Apache Solr pada Docker. Namun sebelum kita membangun Search Engine, kita perlu melakukan konfigurasi container Docker terlebih dahulu.
+
+Untuk menjalankan Apache Nutch dan Apache Solr, dibutuhkan Java Development Kit (JDK) versi 11 atau lebih tinggi. Oleh karena itu, kita perlu membuat sebuah container yang berisi JDK versi 11.
+
+Berikut adalah langkah-langkah yang akan kita lakukan:
+
+1. Melakukan Pull Image Ubuntu
+
+Base Image yang akan kita gunakan adalah **Ubuntu**
+
+```bash
+docker pull ubuntu
+```
+
+2. Membuat Container Ubuntu
+
+```bash
+docker run -it -p 8983:8983 --name search-engine ubuntu /bin/bash
+```
+
+<Callout>
+    Perintah `-it` digunakan untuk menjalankan container dalam mode interaktif \
+    Perintah `-p 8983:8983` digunakan untuk mengalihkan port 8983 dari host ke port 8983 di dalam container \
+    Perintah `--name search-engine` digunakan untuk memberikan nama container \
+    Perintah `/bin/bash` digunakan untuk menjalankan shell bash di dalam container
+</Callout>
+
+
+3. Masuk ke dalam Container Ubuntu
+
+```bash
+docker exec -it search-engine /bin/bash
+```
+
+4. Update dan Upgrade Ubuntu
+
+```bash
+apt update
+```
+
+5. Install Java Development Kit (JDK)
+
+```bash
+apt install openjdk-11-jdk
+```
+
+6. Menambahkan Environment Variable JAVA_HOME pada file `.bashrc`
+
+```bash
+echo "export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64" >> ~/.bashrc
+```
+
+7. Menjalankan Environment Variable JAVA_HOME
+
+```bash
+source ~/.bashrc
+```
+
+8. Selamat, container Docker telah berhasil dikonfigurasi!
+
+Dengan melakukan konfigurasi container Docker, kita telah berhasil membuat sebuah container yang berisi JDK versi 11. Container ini akan kita gunakan untuk menjalankan Apache Nutch dan Apache Solr pada tutorial selanjutnya.
+
 
