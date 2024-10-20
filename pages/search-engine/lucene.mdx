@@ -1,0 +1,291 @@
+import { Callout } from 'nextra/components';
+
+# Apache Lucene
+
+Apache Lucene adalah sebuah library open-source yang digunakan untuk melakukan indexing dan searching pada teks. Lucene dikembangkan oleh Doug Cutting pada tahun 1999 dan saat ini merupakan salah satu library yang paling populer digunakan untuk membangun search engine.
+
+Lucene menyediakan berbagai fitur yang memungkinkan pengguna untuk melakukan indexing dan searching pada teks dengan mudah. Beberapa fitur yang disediakan oleh Lucene antara lain:
+
+- **Indexing**: Lucene menyediakan API untuk melakukan indexing pada teks. Dengan menggunakan API ini, pengguna dapat melakukan indexing pada teks dengan mudah dan cepat.
+
+- **Searching**: Lucene menyediakan API untuk melakukan searching pada teks. Dengan menggunakan API ini, pengguna dapat melakukan searching pada teks dengan berbagai metode seperti boolean query, fuzzy query, dan lain sebagainya.
+
+- **Scoring**: Lucene menyediakan fitur scoring yang memungkinkan pengguna untuk memberikan bobot pada hasil pencarian. Dengan menggunakan fitur ini, pengguna dapat mengurutkan hasil pencarian berdasarkan relevansi.
+
+- **Highlighting**: Lucene menyediakan fitur highlighting yang memungkinkan pengguna untuk menyorot hasil pencarian. Dengan menggunakan fitur ini, pengguna dapat menyorot kata kunci pada hasil pencarian.
+
+- **Faceting**: Lucene menyediakan fitur faceting yang memungkinkan pengguna untuk melakukan aggregasi pada hasil pencarian. Dengan menggunakan fitur ini, pengguna dapat melakukan aggregasi pada hasil pencarian berdasarkan kriteria tertentu.
+
+Dengan berbagai fitur yang disediakan oleh Lucene, pengguna dapat dengan mudah membangun search engine yang powerful dan scalable. Selain itu, Lucene juga memiliki dokumentasi yang lengkap dan aktif, sehingga pengguna dapat dengan mudah mempelajari cara menggunakan library ini.
+
+Jika Anda tertarik untuk mempelajari lebih lanjut tentang Apache Lucene, Anda dapat mengunjungi situs resmi Lucene di [https://lucene.apache.org/](https://lucene.apache.org/). Di situs tersebut, Anda dapat menemukan berbagai informasi mengenai Lucene, termasuk dokumentasi
+
+## Instalasi Apache Lucene
+
+Untuk menggunakan Apache Lucene, Anda perlu menambahkan library Lucene ke dalam proyek Java Anda. Berikut adalah langkah-langkah untuk menginstalasi Apache Lucene:
+
+1. Buatlah sebuah folder dengan nama apache lucene pada direktori '/opt'
+
+```bash
+mkdir /opt/apache-lucene
+```
+
+2. Download library Lucene dari website resmi Apache Lucene
+
+```bash
+wget https://www.apache.org/dyn/closer.lua/lucene/java/9.12.0/lucene-9.12.0.tgz
+```
+
+<Callout>
+    Pada tutorial ini, kita menggunakan versi 9.12.0 dari Apache Lucene. Karena versi java yang dibutuhkan adalah Java 11
+</Callout>
+
+3. Ekstrak file `lucene-9.12.0.tgz`
+
+```bash
+tar -xvf lucene-9.12.0.tgz
+```
+
+4. Pindahkan folder `lucene-9.12.0` ke dalam folder `/opt/apache-lucene`
+
+```bash
+mv lucene-9.12.0 /opt/apache-lucene
+```
+
+5. Buatlah sebuah bash script untuk meng-compile kode Java yang menggunakan library Lucene
+
+Pada direktori `/opt/apache-lucene`, buatlah sebuah file dengan nama `index.sh` dan isi file tersebut dengan kode berikut:
+
+```bash
+#!/bin/bash
+
+java -cp "lucene-9.12.0/module/*" CreateIndex.java
+```
+
+6. Buatlah sebuah bash script untuk melakukan searching pada index yang telah dibuat
+
+Pada direktori `/opt/apache-lucene`, buatlah sebuah file dengan nama `search.sh` dan isi file tersebut dengan kode berikut:
+
+```bash
+#!/bin/bash
+
+java -cp "lucene-9.12.0/module/*" SearchIndex.java
+```
+
+## Membuat Index dengan Apache Lucene
+
+1. Buatlah sebuah file Java dengan nama `CreateIndex.java` dan isi file tersebut dengan kode berikut:
+
+```java
+import java.nio.file.Path;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+
+import org.apache.lucene.document.TextField;
+import java.io.*;
+
+public class CreateIndex {
+
+    /**
+     * Menambahkan dokumen ke index
+     * @param w
+     * @param filename
+     * @param text
+     * @throws IOException
+     */
+    private static void addDoc(IndexWriter w, String filename ,String text) throws IOException {
+        Document doc = new Document();
+        doc.add(new TextField("filename", filename, Field.Store.YES));
+        doc.add(new TextField("content", text, Field.Store.YES));
+        w.addDocument(doc);
+    }
+
+    public static void main(String[] args) {
+        // Inisiaisasi index
+        Analyzer analyzer;
+        Path indexPath;
+        Directory directory;
+        IndexWriterConfig config;
+        IndexWriter iwriter;
+
+        try {
+            // Hapus index jika sudah ada
+            if(new File("index").exists()){
+                File indexDir = new File("index");
+                for (File file : indexDir.listFiles()) {
+                    file.delete();
+                }
+                indexDir.delete();
+            }
+            analyzer = new StandardAnalyzer();
+            indexPath = Path.of("index");
+            directory = FSDirectory.open(indexPath);
+            config = new IndexWriterConfig(analyzer);
+            iwriter = new IndexWriter(directory, config);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            System.out.println("Gagal inisialisasi index");
+            return;
+        }
+
+        // Tambahkan dokumen ke index
+        try {
+
+            File folder = new File("raw");
+            File[] listOfFiles = folder.listFiles();
+
+            if (listOfFiles != null) {
+                for (int i = 0; i < listOfFiles.length; i++) {
+                    if (listOfFiles[i].isFile()) {
+                        // Membaca isi file
+                        BufferedReader br = new BufferedReader(new FileReader(listOfFiles[i]));
+                        String allText = "";
+                        String line = br.readLine();
+                        while (line != null) {
+                            allText += line + " ";
+                            line = br.readLine();
+                        }
+                        br.close();
+
+                        // Menambahkan dokumen ke index
+                        addDoc(iwriter, listOfFiles[i].getName() ,allText);
+                    } else if (listOfFiles[i].isDirectory()) {
+                        System.out.println("Directory " + listOfFiles[i].getName());
+                    }
+                }
+            }
+            iwriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}
+```
+
+<Callout type='warning'>
+    Penjelasan kode akan ditambahkan nanti jadi dengarkan saja apa yang ada di kelas :v
+</Callout>
+
+2. Buatlah sebuah folder dengan nama `raw` pada direktori `/opt/apache-lucene`
+
+```bash
+mkdir /opt/apache-lucene/raw
+```
+
+3. Masukkan beberapa file teks ke dalam folder `raw`
+
+```bash
+echo "Ini adalah contoh dokumen pertama" > /opt/apache-lucene/raw/dokumen1.txt
+echo "Ini adalah contoh dokumen kedua" > /opt/apache-lucene/raw/dokumen2.txt
+echo "Ini adalah contoh dokumen ketiga" > /opt/apache-lucene/raw/dokumen3.txt
+```
+
+4. Jalankan script `index.sh` untuk membuat index
+
+```bash
+bash index.sh
+```
+
+## Mencari Data dengan Apache Lucene
+
+1. Buatlah sebuah file Java dengan nama `SearchIndex.java` dan isi file tersebut dengan kode berikut:
+
+```java
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.index.StoredFields;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import java.nio.file.Path;
+
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import java.util.Scanner; 
+
+public class SearchIndex {
+    public static void main(String[] args) {
+        Scanner myScanner = new Scanner(System.in); 
+        // Inisialisasi index core
+        Analyzer analyzer;
+        Directory directory;
+        Path indexPath;
+        
+        try {
+            analyzer = new StandardAnalyzer();
+            indexPath = Path.of("index");
+            directory = FSDirectory.open(indexPath);
+
+            // Baca direktori index yang telah di simpan
+            DirectoryReader ireader = DirectoryReader.open(directory);
+            IndexSearcher isearcher = new IndexSearcher(ireader);
+
+            // Melakukan pencarian pada field content
+            QueryParser parser = new QueryParser("content", analyzer);
+
+            System.out.println("Masukkan kata kunci pencarian: ");
+            String inputUser = myScanner.nextLine();
+            Query query = parser.parse(inputUser);
+
+            // Menampilkan hasil pencarian
+            ScoreDoc[] hits = isearcher.search(query, 10).scoreDocs;
+            System.out.println("Ditemukan " + hits.length + " dokumen yang sesuai.");
+            StoredFields storedFields = isearcher.storedFields();
+            for (int i = 0; i < hits.length; i++) {
+                Document hitDoc = storedFields.document(hits[i].doc);
+                System.out.println("Judul Dokumen : " + hitDoc.get("filename"));
+                System.out.println(hitDoc.get("content"));
+            }
+            ireader.close();
+            directory.close();
+            myScanner.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}
+```
+
+<Callout type='warning'>
+    Penjelasan kode akan ditambahkan nanti jadi dengarkan saja apa yang ada di kelas :v
+</Callout>
+
+2. Jalankan script `search.sh` untuk melakukan pencarian pada index
+
+```bash
+bash search.sh
+```
+
+Akan muncul sebuah input untuk memasukkan kata kunci pencarian. Masukkan kata kunci pencarian yang ingin Anda cari, kemudian tekan `Enter`. Apache Lucene akan melakukan pencarian pada index yang telah dibuat dan menampilkan hasil pencarian yang sesuai dengan kata kunci yang dimasukkan.
+
+```
+Masukkan kata kunci pencarian: 
+ketiga
+```
+
+Lalu akan muncul hasil pencarian yang sesuai dengan kata kunci yang dimasukkan.
+
+```
+Ditemukan 1 dokumen yang sesuai.
+Judul Dokumen : dokumen3.txt
+Ini adalah contoh dokumen ketiga
+```
+
+Dengan demikian, Anda telah berhasil membuat index dan melakukan pencarian pada data menggunakan Apache Lucene. Selamat mencoba!
+
+## Integrasi Apache Nutch dengan Apache Lucene
+
+<Callout>
+    To be continued... ga sempat bikin :v
+</Callout>

@@ -4,5 +4,6 @@
     "nutch": "Instalasi Apache Nutch",
     "solr": "Instalasi Apache Solr",
     "crawling-indexing": "Crawling dan Indexing Data",
-    "query": "Query Data dengan Solr"
+    "query": "Query Data dengan Solr",
+    "lucene": "Apache Lucene"
 }
