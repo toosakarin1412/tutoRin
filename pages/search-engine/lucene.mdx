@@ -286,6 +286,256 @@ Dengan demikian, Anda telah berhasil membuat index dan melakukan pencarian pada 
 
 ## Integrasi Apache Nutch dengan Apache Lucene
 
-<Callout>
-    To be continued... ga sempat bikin :v
-</Callout>
+Untuk mengintegrasikan Apache Nutch dengan apache lucene terdapat 2 cara yaitu menggunakan *library* apache nutch untuk membaca segment dan mengindex menggunakan hasil *dump* dari apache nutch.
+
+### Integrasi dengan Menggunakan Dump dari Apache Nutch
+
+Sebelum melakukan integrasi pastikan anda telah menginstall library JSoup pada project Lucene. Berikut adalah langkah-langkah untuk Instalasi JSoup:
+
+1. Download library JSoup dari website resmi JSoup
+
+```bash
+wget https://jsoup.org/packages/jsoup-1.14.3.jar
+```
+
+2. Pindahkan file `jsoup-1.14.3.jar` ke dalam folder `modules` pada direktori `/opt/apache-lucene/lucene-9.12.0`
+
+```bash
+mv jsoup-1.14.3.jar /opt/apache-lucene/lucene-9.12.0/modules
+```
+
+Jsoup telah berhasil diinstall pada project Lucene.
+
+Untuk melakukan integrasi dengan menggunakan dump dari Apache Nutch, berikut adalah langkah-langkahnya:
+
+1. Buatlah sebuah folder dengan nama `nutch` pada direktori `/opt/apache-lucene`
+
+```bash
+mkdir /opt/apache-lucene/nutch
+```
+
+2. Download hasil dump dari Apache Nutch
+
+```bash
+bin/nutch dump -segment /path/to/segment -outputDir /opt/apache-lucene/nutch
+```
+
+3. Pada file Indexer.java, ubah kode menjadi seperti berikut :
+
+```java
+import java.nio.file.Path;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import org.apache.lucene.document.TextField;
+import java.io.*;
+
+public class Indexer {
+
+    /**
+     * Menambahkan dokumen ke index
+     * @param w
+     * @param filename
+     * @param text
+     * @throws IOException
+     */
+    private static void addDoc(IndexWriter w, String filename ,String text) throws IOException {
+        Document doc = new Document();
+        doc.add(new TextField("filename", filename, Field.Store.YES));
+        doc.add(new TextField("content", text, Field.Store.YES));
+        w.addDocument(doc);
+    }
+
+    /**
+     * Indexing file txt
+     * @param iwriter
+     * @param file
+     * @throws IOException
+     */
+    private static void indexTxTDoc(IndexWriter iwriter, File file) throws IOException {
+        try {
+            // Tambahkan dokumen ke index
+            if (file.isFile()) {
+                // Membaca isi file
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String allText = "";
+                String line = br.readLine();
+                while (line != null) {
+                    allText += line + " ";
+                    line = br.readLine();
+                }
+                br.close();
+
+                // Menambahkan dokumen ke index
+                addDoc(iwriter, file.getName() ,allText);
+            } else if (file.isDirectory()) {
+                System.out.println(file.getName() + " adalah directory");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+    
+    private static void indexHTMLDoc(IndexWriter iwriter, File file) throws IOException {
+        try {
+            // Tambahkan dokumen ke index
+            if (file.isFile()) {
+                // Membaca isi file
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String allText = "";
+                String line = br.readLine();
+                while (line != null) {
+                    allText += line + " ";
+                    line = br.readLine();
+                }
+                br.close();
+                
+                // Parsing html
+                org.jsoup.nodes.Document doc = Jsoup.parse(allText);
+                
+                // Extract data dari halaman html
+
+                String titleText;
+                try {
+                    Element title = doc.select("h1[class='read__title']").first();
+                    titleText = title.text();
+                } catch (Exception e) {
+                    System.out.println("Title tidak ditemukan");
+                    titleText = "";
+                }
+
+                String contentText;
+                try {
+                    Elements content = doc.select("div[class='read__content']");
+                    contentText = content.text();
+                } catch (Exception e) {
+                    System.out.println("Content tidak ditemukan");
+                    contentText = "";
+                }
+
+                String indexText = titleText + " - " + contentText;
+
+                // Menambahkan dokumen ke index
+                addDoc(iwriter, file.getName() , indexText);
+            } else if (file.isDirectory()) {
+                System.out.println(file.getName() + " adalah directory");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        // Inisiaisasi index
+        Analyzer analyzer;
+        Path indexPath;
+        Directory directory;
+        IndexWriterConfig config;
+        IndexWriter iwriter;
+
+        try {
+            // Hapus index jika sudah ada
+            if(new File("index").exists()){
+                File indexDir = new File("index");
+                for (File file : indexDir.listFiles()) {
+                    file.delete();
+                }
+                indexDir.delete();
+            }
+            analyzer = new StandardAnalyzer();
+            indexPath = Path.of("index");
+            directory = FSDirectory.open(indexPath);
+            config = new IndexWriterConfig(analyzer);
+            iwriter = new IndexWriter(directory, config);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            System.out.println("Gagal inisialisasi index");
+            return;
+        }
+        
+        // Indexing file txt
+        try {
+            File folder = new File("html");
+            File[] listOfFiles = folder.listFiles();
+            for (int i = 0; i < listOfFiles.length; i++) {
+                indexHTMLDoc(iwriter, listOfFiles[i]);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            System.out.println("Gagal indexing file");
+            return;
+        }
+
+        // Tutup index
+        try {
+            iwriter.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            System.out.println("Gagal menutup index");
+            return;
+        }
+    }
+}
+```
+
+4. Buatlah sebuah folder dengan nama `html` pada direktori `/opt/apache-lucene`
+
+```bash
+mkdir /opt/apache-lucene/html
+```
+
+5. Pindahkan semua file html hasil dump dari Apache Nutch ke dalam folder `html` dengan menggunakan kode berikut:
+
+```bash
+#!/bin/bash
+#script to loop through directories to merge files
+
+OUTPUT_DIR="allData"
+mkdir -p $OUTPUT_DIR
+INPUT_DIR=$1
+
+processing_dir() {
+    echo "Processing directory: $1"
+    for list in $1/*; do
+        if [ -d "$list" ]; then
+            processing_dir $list
+        else 
+            ext="${list##*.}"
+            if [ $ext == "html" ]; then
+                cp $list $OUTPUT_DIR
+            fi
+        fi
+    done
+}
+
+processing_dir $INPUT_DIR
+```
+
+Simpan kode di atas ke dalam file `me rge.sh` dan jalankan kode berikut:
+
+```bash
+bash merge.sh /opt/apache-lucene/nutch
+```
+
+6. Jalankan script `index.sh` untuk membuat index
+
+```bash
+bash index.sh
+```
+
+7. Jalankan script `search.sh` untuk melakukan pencarian pada index
+
+```bash
+bash search.sh
+```
